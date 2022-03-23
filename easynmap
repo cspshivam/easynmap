@@ -1,0 +1,28 @@
+#!/bin/bash
+if [[ $EUID -ne 0 ]]; then
+    echo "$0 is not running as root. Try using sudo."
+    exit 2
+fi
+echo "
+┏━╸┏━┓┏━┓╻ ╻┏┓╻┏┳┓┏━┓┏━┓
+┣╸ ┣━┫┗━┓┗┳┛┃┗┫┃┃┃┣━┫┣━┛
+┗━╸╹ ╹┗━┛ ╹ ╹ ╹╹ ╹╹ ╹╹
+	   by CSPSHIVΔM
+"
+read -p "Enter Target IP : " ip
+mkdir EasyNmap-Results
+echo "	"
+echo -e "============Quick Scan============"
+echo "	"
+nmap $ip -oN EasyNmap-Results/$ip-quick-scan.nmap
+notify-send "EasyNmap" "Quick Scan Finished"
+echo "	"
+echo "============Basic Scan============"
+echo "	"
+nmap --top-ports 1000 -F -sSCV $ip -oN EasyNmap-Results/$ip-basic-scan.nmap
+notify-send "EasyNmap" "Basic Scan Finished"
+echo "	"
+echo "============Full Scan============"
+echo "	"
+nmap -p 1-65535 -sSCV $ip -oN EasyNmap-Results/$ip-full-scan.nmap
+notify-send "EasyNmap" "Full Scan Finished"
